@@ -89,12 +89,13 @@ def main():
         print("点击保存")
         time.sleep(t)
         if "确定数据无误并提交数据" in driver.page_source:
-            driver.find_element_by_xpath('/html/body/div[61]/div[1]/div[1]/div[2]/div[2]/a[1]').click()
+            driver.find_element_by_xpath('/html/body/div[62]/div[1]/div[1]/div[2]/div[2]/a[1]').click()
             print(name + '\t体温上报成功')
             msg += name + '\t体温上报成功' + '\n\n'
         else:
-           print(name + '\t未主动上报一次来完善疫苗信息')
-           msg += name + '\t未主动上报一次来完善疫苗信息' + '\n\n'
+           error = True
+           print(name + '\t请主动上报一次，来完善新增信息')
+           msg += name + '\t请主动上报一次，来完善新增信息' + '\n\n'
         driver.quit()
         return
 
@@ -132,7 +133,7 @@ if __name__ == '__main__':
     else:
         serverchan_sckey = ""
 
-    time.sleep(random.randint(0, 300))
+    #time.sleep(random.randint(0, 300))
     
     
     error = False
@@ -145,15 +146,15 @@ if __name__ == '__main__':
         t += 10
         msg = '体温上报' + '\n\n'
         main()
-        if t > 80:
+        if t > 50:
             break
 
     if error:
-        subject = '体温上报\t失败'
+        subject = name + '\t' + '体温上报\t失败'
         server_post(subject, msg, serverchan_sckey)
         kutui_post(subject, msg, kutui_key)
 
     else:
-        subject = '体温上报\t成功'
+        subject = name + '\t' + '体温上报\t成功'
         server_post(subject, msg, serverchan_sckey)
         kutui_post(subject, msg, kutui_key)
